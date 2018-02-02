@@ -3,7 +3,7 @@ import cv2
 import requests
 
 cap = cv2.VideoCapture(0)
-address = '172.16.192.148/ESPsmartHouse.php?face='
+address = 'http://172.16.192.148/ESPsmartHouse/ESPsmartHouse.php?face='
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')

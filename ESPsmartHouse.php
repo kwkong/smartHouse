@@ -29,12 +29,15 @@
 
 	if(isset($_GET["status"]))
 	{ 
-
-		$file = fopen("text.txt", "w") or die("Unable to open file!");
-		echo 'hello';
-		$status = $_GET["status"];
-		fwrite($file, $status);
+		$file = fopen("text.txt", "r") or die("Unable to open file!");
+		$status = fgets($file);
+		$face = substr($status,4,1);
 		fclose($file);
+
+		$file1 = fopen("text.txt", "w") or die("Unable to open file!");
+		$status = $_GET["status"];
+		fwrite($file1, $status . $face);
+		fclose($file1);
 		exit();
 	}
 
