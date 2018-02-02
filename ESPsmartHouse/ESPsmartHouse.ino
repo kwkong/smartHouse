@@ -88,7 +88,7 @@ void webCheck()
         
         String params = "esp=";
         
-        String post = "POST /ESPsmartHouse.php HTTP/1.1\r\nHost: 172.16.192.148\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ";
+        String post = "POST /ESPsmartHouse/ESPsmartHouse.php HTTP/1.1\r\nHost: 172.16.192.148\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ";
         post += params.length();
         post += "\r\n\r\n";
         post += params;
