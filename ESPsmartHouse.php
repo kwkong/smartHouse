@@ -40,11 +40,13 @@
 
         if(isset($_GET["face"]))
 	{
-             $file = fopen("text.txt", "w") or die("Unable to open file!");
+             $file = fopen("text.txt", "r") or die("Unable to open file!");
              $status = fgets($file);
-             $status = substr($status,0,3);
-             fwrite($file, status . $_GET["face"])
              fclose($file);
+             $file1 = fopen("text.txt", "w") or die("Unable to open file!");
+             $status = substr($status,0,3);
+             fwrite($file1, $status . $_GET["face"]);
+             fclose($file1);
              exit();
 
 	}

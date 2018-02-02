@@ -2,8 +2,6 @@
 
 #define DEBUG true
 
-const int fanPin = 8;
-const int lightPin = 9;
 
 SoftwareSerial esp(3,2); // make RX Arduino line is pin 2, make TX Arduino line is pin 3.
                              // This means that you need to connect the TX line from the esp to the Arduino's pin 2
@@ -31,11 +29,6 @@ void setup()
     //Serial.print("Ayyy i'm starting over heeere");
 
     sendData("AT+RST\r\n",2000,DEBUG); // reset module
-
-
-	pinMode(13, OUTPUT);
-	pinMode(fanPin, OUTPUT);
-	pinMode(lightPin, OUTPUT);
 
 
 }
@@ -130,6 +123,8 @@ void sendState()
 	{
 		msg += '2' ;
 	}
+
+    msg += '@';
 
 	Serial.println(msg);
 	//mega.println("poop");
