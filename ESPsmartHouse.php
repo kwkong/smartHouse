@@ -38,4 +38,15 @@
 		exit();
 	}
 
+        if(isset($_GET["face"]))
+	{
+             $file = fopen("text.txt", "w") or die("Unable to open file!");
+             $status = fgets($file);
+             $status = substr($status,0,3);
+             fwrite($file, status . $_GET["face"])
+             fclose($file);
+             exit();
+
+	}
+
  ?>
