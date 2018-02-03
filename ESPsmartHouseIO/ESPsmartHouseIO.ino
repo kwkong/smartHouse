@@ -1,14 +1,15 @@
 #include "Servo.h"
 
 
-#define nano Serial3
+#define nano Serial1
 
 const int fanPin = 9;
 const int lightPin = 8;
 
 int val;
 
-char lightState,fanState;
+int lightState,fanState;
+
 
 
 
@@ -16,13 +17,13 @@ char lightState,fanState;
 void setup()
 {
 	Serial.begin(9600);
-	nano.begin(9600);
+	nano.begin(115200);
 
 	pinMode(lightPin, OUTPUT);
 	pinMode(fanPin, OUTPUT);
+
+	pinMode(12, OUTPUT);
 	pinMode(13, OUTPUT);
-
-
 }
 
 void loop()
@@ -35,33 +36,40 @@ void getState()
 {
 	String msg="";
 	int leave;
+	char c;
+	int start; 
+ 
+ 		while(1)
+ 		{
+			if (nano.available())
+	        {  
+	            c = nano.read(); // read the next character.
 
-	Serial.println("Entering first while");
+	            if(c == '@')
+	            {
+	            	digitalWrite(12, LOW);
+	            	break;
+	            }
+				
+	            if (c == '*')
+	            {
+                	start = 1;
+	            }
 
-	//while (leave != 1)
-	//{
-        if (nano.available())
-        {  
-            char c = nano.read(); // read the next character.
-            msg+=c;
-            Serial.println(msg);
+	            if(start == 1)
+	            {
+	            	msg+=c;
+	            }            
+	        }  
+  	    }
 
-            if(msg == '@')
-            {
-            	leave = 1;
-
-            	Serial.println("leaving");
-            }
-        }
-    //}    
+    digitalWrite(12, HIGH);
+ 	Serial.println(msg);
 
 	val = msg.indexOf('*');
 
-    if (val > 0)
- 	{
- 		lightState = (msg.charAt(val+1));
- 		fanState = (msg.charAt(val+2));
-	}
+	lightState = (msg.charAt(val+1) - '0');
+	fanState = (msg.charAt(val+2) - '0');
 }
 
 void writeState()

@@ -32,6 +32,7 @@
 		$file = fopen("text.txt", "r") or die("Unable to open file!");
 		$status = fgets($file);
 		$face = substr($status,4,1);
+		echo $face;
 		fclose($file);
 
 		$file1 = fopen("text.txt", "w") or die("Unable to open file!");
@@ -47,7 +48,7 @@
              $status = fgets($file);
              fclose($file);
              $file1 = fopen("text.txt", "w") or die("Unable to open file!");
-             $status = substr($status,0,3);
+             $status = substr($status,0,4);
              fwrite($file1, $status . $_GET["face"]);
              fclose($file1);
              exit();
