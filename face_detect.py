@@ -1,12 +1,16 @@
 import numpy as np
 import cv2
 import requests
-
+import pyttsx
+import time
 cap = cv2.VideoCapture(0)
 address = 'http://172.16.192.148/ESPsmartHouse/ESPsmartHouse.php?face='
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
+engine = pyttsx.init()
+last_spoke_time = current_milli_time()
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -17,9 +21,15 @@ while(True):
         faces = face_cascade.detectMultiScale(gray, 1.3, 3)
         
         if len(faces) > 0:
-            r = requests.get(address+'1')
+            #r = requests.get(address+'1')
+            if((current_milli_time() - last_spoke_time) > 2000):
+                engine.say('let me out')
+	        engine.runAndWait()
+                last_spoke_time = current_milli_time()
+                print("Talking")
         else:
-            r = requests.get(address+'0')
+	    pass
+            #r = requests.get(address+'0')
        
         for (x,y,w,h) in faces:
             cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2) 
