@@ -1,3 +1,5 @@
+
+
 #include <SoftwareSerial.h>
 
 #define DEBUG true
@@ -16,12 +18,14 @@ int leave;
 
 char lightState;
 char fanState;
+char alarmState;
+char faceState;
 
 
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
 
     esp.begin(9600); 
     //mega.begin(9600);
@@ -29,6 +33,8 @@ void setup()
     //Serial.print("Ayyy i'm starting over heeere");
 
     sendData("AT+RST\r\n",2000,DEBUG); // reset module
+
+    pinMode(12, INPUT_PULLUP);
 
 
 }
@@ -64,8 +70,11 @@ String sendData(String command, const int timeout, boolean debug)
      	{
      		lightState = (response.charAt(val+1));
      		fanState = (response.charAt(val+2));
+            alarmState = (response.charAt(val+3));
+            faceState = (response.charAt(val+4));
+
     	}
-    //	Serial.println(lightState);
+
     //	Serial.print(response);
     	return response;
 }
@@ -93,7 +102,7 @@ void webCheck()
         
         sendData(cipStart,10,DEBUG);
         sendData(cipSend,10,DEBUG);
-        sendData(post,500,DEBUG);
+        sendData(post,800,DEBUG);
 
     }
 }
@@ -104,29 +113,50 @@ void sendState()
 
 	msg += '*';
 
-	if (fanState == 1 || fanState == 0 )
+	if (fanState == '1' || fanState == '0' )
 	{
 		msg += fanState;
 	}
 
 	else
 	{
-		msg+='2';
+		msg+='2';  
 	}
 
-	if (lightState == 1 || lightState == 0 )
+
+	if (lightState == '1' || lightState == '0' )
 	{
 		msg += lightState;
 	}
 
 	else
 	{
-		msg += '2' ;
+		msg += '2' ;    
 	}
+
+    if (alarmState == '1' || alarmState == '0' )
+    {
+        msg += alarmState;
+    }
+
+    else
+    {
+        msg += '2' ;
+    }
+
+    if (faceState == '1' || faceState == '0' )
+    {
+        msg += faceState;
+    }
+
+    else
+    {
+        msg += '2' ;      
+    }
 
     msg += '@';
 
 	Serial.println(msg);
-	//mega.println("poop");
-	
+
+    while(digitalRead(12)==1);	
 }
