@@ -1,5 +1,4 @@
 
-
 #include <SoftwareSerial.h>
 
 #define DEBUG true
@@ -8,13 +7,6 @@
 SoftwareSerial esp(3,2); // make RX Arduino line is pin 2, make TX Arduino line is pin 3.
                              // This means that you need to connect the TX line from the esp to the Arduino's pin 2
                              // and the RX line from the esp to the Arduino's pin 3
-
-//SoftwareSerial mega(10,11);
-
-String r = "";
-
-int val;
-int leave;
 
 char lightState;
 char fanState;
@@ -25,10 +17,9 @@ char faceState;
 
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
 
     esp.begin(9600); 
-    //mega.begin(9600);
     
     //Serial.print("Ayyy i'm starting over heeere");
 
@@ -64,7 +55,7 @@ String sendData(String command, const int timeout, boolean debug)
         }
     }
     
-        val = response.indexOf('*');
+        int val = response.indexOf('*');
 
         if (val > 0)
      	{
@@ -75,7 +66,7 @@ String sendData(String command, const int timeout, boolean debug)
 
     	}
 
-    //	Serial.print(response);
+    	//Serial.print(response);
     	return response;
 }
 
@@ -86,11 +77,11 @@ void webCheck()
 	if(!esp.available()) // check if the esp is sending a message 
     {
 
-        String cipStart = "AT+CIPSTART=\"TCP\",\"172.16.192.148\",80\r\n";
+        String cipStart = "AT+CIPSTART=\"TCP\",\"172.16.192.59\",80\r\n";
         
         String params = "esp=";
         
-        String post = "POST /ESPsmartHouse/ESPsmartHouse.php HTTP/1.1\r\nHost: 172.16.192.148\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ";
+        String post = "POST /ESPsmartHouse/ESPsmartHouse.php HTTP/1.1\r\nHost: 172.16.192.59\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ";
         post += params.length();
         post += "\r\n\r\n";
         post += params;
@@ -100,9 +91,9 @@ void webCheck()
         cipSend += post.length();
         cipSend += "\r\n";
         
-        sendData(cipStart,10,DEBUG);
-        sendData(cipSend,10,DEBUG);
-        sendData(post,800,DEBUG);
+        sendData(cipStart,20,DEBUG);
+        sendData(cipSend,20,DEBUG);
+        sendData(post,500,DEBUG);
 
     }
 }
@@ -113,9 +104,9 @@ void sendState()
 
 	msg += '*';
 
-	if (fanState == '1' || fanState == '0' )
+	if (lightState == '1' || lightState == '0' )
 	{
-		msg += fanState;
+		msg += lightState;
 	}
 
 	else
@@ -124,9 +115,9 @@ void sendState()
 	}
 
 
-	if (lightState == '1' || lightState == '0' )
+	if (fanState == '1' || fanState == '0' )
 	{
-		msg += lightState;
+		msg += fanState;
 	}
 
 	else
@@ -156,7 +147,7 @@ void sendState()
 
     msg += '@';
 
-	Serial.println(msg);
+	Serial.print(msg);
 
     while(digitalRead(12)==1);	
 }
