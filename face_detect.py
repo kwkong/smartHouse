@@ -3,7 +3,7 @@ import cv2
 import requests
 import pyttsx
 import time
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 address = 'http://172.16.192.148/ESPsmartHouse/ESPsmartHouse.php?face='
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -23,8 +23,9 @@ while(True):
         if len(faces) > 0:
             #r = requests.get(address+'1')
             if((current_milli_time() - last_spoke_time) > 2000):
-                engine.say('let me out')
-	        engine.runAndWait()
+                print(faces[0][0])
+                #engine.say('let me out')
+	        #engine.runAndWait()
                 last_spoke_time = current_milli_time()
                 print("Talking")
         else:
